@@ -1,9 +1,10 @@
 # 🔥 Hunter-Kaido
 > Advanced Offensive Web Scanner for Parameter Fuzzing & Vulnerability Discovery
 
-Hunter-Kaido é uma ferramenta ofensiva automatizada para reconhecimento, fuzzing inteligente de parâmetros e detecção de vulnerabilidades web, ideal para pentesters, red teams e bug bounty hunters.
 
 ---
+## Descrição
+A Hunter-Kaido é uma ferramenta ofensiva automatizada de segurança web que executa um pipeline completo de reconhecimento e fuzzing, iniciando com enumeração de subdomínios via subfinder, coleta de URLs com gau e validação de hosts ativos por requisições assíncronas com aiohttp, seguido por análise de parâmetros HTTP baseada em mapeamento semântico para identificar possíveis pontos de entrada exploráveis, aplicando geração dinâmica e mutação de payloads conforme o contexto da aplicação, incluindo técnicas como encoding, variações de case, poliglots e bypass de WAF, enquanto adapta os testes com base em respostas HTTP para detectar comportamentos indicativos de XSS, SQLi, SSTI, SSRF, RCE e IDOR, operando com alta concorrência, rate limiting por host, deduplicação de requisições e priorização adaptativa de payloads, e consolidando estatísticas de execução em tempo real, resultando em um sistema automatizado de descoberta de superfície de ataque e validação heurística de vulnerabilidades web.
 
 ## 🚀 Features
 - Enumeração de subdomínios (subfinder)
