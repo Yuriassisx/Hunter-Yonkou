@@ -2,7 +2,6 @@
 import asyncio, aiohttp, subprocess, sys, os, hashlib, json, shutil, time, re, random
 from urllib.parse import urlparse, parse_qs, urlencode, quote
 
-# ---------------- CONFIG ----------------
 OUTPUT_DIR = "output"
 THREADS = 10
 RATE = 0.05
@@ -14,13 +13,12 @@ SUBPROCESS_SEM = asyncio.Semaphore(SUBPROCESS_LIMIT)
 
 WAF_SIGNS = ["cloudflare","akamai","sucuri","imperva","incapsula"]
 
-# ---------------- GLOBALS ----------------
 BASELINES = {}
 REQ_HASH = set()
 HOST_LAST = {}
 Q_TABLE = {}
 
-# 🔥 NOVO: STATS
+# NOVO: STATS
 STATS = {
     "urls": 0,
     "params": 0,
@@ -28,7 +26,6 @@ STATS = {
     "vulns": 0
 }
 
-# ---------------- LOG ----------------
 def log(msg):
     print(msg, flush=True)
 
@@ -36,7 +33,7 @@ def progress(stage, i, total):
     pct = (i/total*100) if total else 0
     print(f"[{stage}] {i}/{total} ({pct:.1f}%)", end="\r", flush=True)
 
-# ---------------- PARAM PATTERNS ----------------
+
 PARAM_PATTERNS = {
     "lfi": ["file","path","page","include","template","view","doc","folder","root","dir","download","filepath"],
     "rce": ["cmd","exec","command","run","shell","process","ping","query","code"],
@@ -48,7 +45,7 @@ PARAM_PATTERNS = {
     "idor": ["id","user_id","uid","account","profile","order_id","doc_id","file_id","invoice","customer"]
 }
 
-# ---------------- UTILS ----------------
+
 def tool_exists(tool):
     return shutil.which(tool) is not None
 
@@ -107,7 +104,7 @@ def unique_req(u):
     REQ_HASH.add(h)
     return True
 
-# ---------------- PAYLOAD ----------------
+
 def generate_payload(v):
     return {
         "xss": "<script>alert(1)</script>",
@@ -118,7 +115,7 @@ def generate_payload(v):
         "idor": "1"
     }.get(v, "test")
 
-# ---------------- MUTATION ----------------
+
 def random_case(s):
     return "".join(c.upper() if random.random() > 0.5 else c.lower() for c in s)
 
@@ -162,7 +159,7 @@ def prioritize_payloads(payloads):
 def update_q(payload, score):
     Q_TABLE[payload] = Q_TABLE.get(payload, 0) + score
 
-# ---------------- DETECÇÕES ----------------
+
 async def check_idor(session, url, param):
     parsed = urlparse(url)
     qs = parse_qs(parsed.query)
@@ -186,7 +183,7 @@ def validate_ssrf(resp):
 def validate_rce(resp):
     return resp and any(x in resp for x in ["uid=", "gid="])
 
-# ---------------- PIPELINE ----------------
+
 async def get_subdomains(domain):
     log(f"[SUBS] {domain}")
     subs=set()
@@ -253,7 +250,7 @@ async def smart_fuzz(urls):
 
     return fuzzed
 
-# ---------------- WORKER ----------------
+
 async def worker(session,item):
     base_url,u,v,payload,param=item
 
@@ -288,7 +285,7 @@ async def worker(session,item):
     else:
         log(f"[SAFE][{v.upper()}] {u}")
 
-# ---------------- VALIDATE ----------------
+
 async def validate_all(fuzzed):
     log("[SCAN] Running...")
 
@@ -296,7 +293,7 @@ async def validate_all(fuzzed):
         tasks = [worker(session,f) for f in fuzzed]
         await asyncio.gather(*tasks)
 
-# ---------------- MAIN ----------------
+
 async def main():
     if len(sys.argv)<2:
         print("uso: python3 hunter.py alvo.com")
