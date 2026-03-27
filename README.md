@@ -11,7 +11,7 @@ Hunter-Kaido é uma ferramenta ofensiva automatizada para reconhecimento, fuzzin
 - Validação de hosts ativos
 - Fuzzing inteligente de parâmetros HTTP
 - Geração dinâmica de payloads
-- Mutação avançada (encoding, case, WAF bypass, polyglots)
+- Mutação avançada de payloads (encoding, case, WAF bypass, polyglots)
 - Execução assíncrona de alta performance
 - Detecção de XSS, SQLi, SSTI, SSRF, RCE e IDOR
 - Sistema de priorização (Q-table)
